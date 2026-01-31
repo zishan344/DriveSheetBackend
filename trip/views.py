@@ -1,9 +1,13 @@
 from collections import defaultdict
 from datetime import date, timedelta
-from rest_framework import status, status, viewsets
+from rest_framework import status, viewsets
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from trip.models import Trip, RouteStop, DailyLog, LogSegment
-from trip.serializers import TripSerializer, RouteStopSerializer, DailyLogSerializer, LogSegmentSerializer
+from trip.serializers import (
+    TripSerializer, RouteStopSerializer, DailyLogSerializer, 
+    LogSegmentSerializer, TripMapSerializer, TripLogsSerializer
+)
 from trip.services.hos_engine import HOSEngine
 from trip.services.route_service import get_route
 from trip.services.log_generator import generate_daily_logs
@@ -18,9 +22,9 @@ class TripViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         data = request.data
 
-        # Route calculation
+        # Route calculation (from pickup to dropoff)
         route = get_route(
-            data["current_location"],
+            data["pickup_location"],
             data["drop_location"]
         )
 
@@ -102,19 +106,29 @@ class TripViewSet(viewsets.ModelViewSet):
             status=status.HTTP_201_CREATED,
         )
 
+    @action(detail=True, methods=['get'])
+    def map(self, request, pk=None):
+        """Get map data including route geometry and stops for a trip."""
+        trip = self.get_object()
+        serializer = TripMapSerializer(trip)
+        
+        # Add geometry from the route if available (stored in first route stop)
+        data = serializer.data
+        
+        # Optionally fetch fresh geometry if needed
+        try:
+            route = get_route(trip.pickup_location, trip.drop_location)
+            data['geometry'] = route.get('geometry')
+        except Exception:
+            # If fresh fetch fails, data will just not include live geometry
+            pass
+        
+        return Response(data)
 
+    @action(detail=True, methods=['get'])
+    def logs(self, request, pk=None):
+        """Get daily logs with all log segments for a trip."""
+        trip = self.get_object()
+        serializer = TripLogsSerializer(trip)
+        return Response(serializer.data)
 
-
-
-
-    
-""" class RouteStopViewSet(viewsets.ModelViewSet):
-    queryset = RouteStop.objects.all()
-    serializer_class = RouteStopSerializer
-class DailyLogViewSet(viewsets.ModelViewSet):
-    queryset = DailyLog.objects.all()
-    serializer_class = DailyLogSerializer
-class LogSegmentViewSet(viewsets.ModelViewSet):
-    queryset = LogSegment.objects.all()
-    serializer_class = LogSegmentSerializer
- """
