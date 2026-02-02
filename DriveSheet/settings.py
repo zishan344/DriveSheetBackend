@@ -16,7 +16,8 @@ SECRET_KEY = 'django-insecure-e0ve=7l9up3bduiz)rqah^umiu5dzos1!*#lj7gt7$2di(ylv+
 DEBUG = True
 
 ALLOWED_HOSTS = []
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS  = [
+    "http://localhost:3000","http://127.0.0.1:8000", "http://localhost:5173"]
 CORS_ALLOW_METHODS = (
     "DELETE",
     "GET",
@@ -52,13 +53,12 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "corsheaders.middleware.CorsMiddleware",
-    "django.middleware.common.CommonMiddleware",
 ]
 
 ROOT_URLCONF = 'DriveSheet.urls'

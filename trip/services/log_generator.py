@@ -1,20 +1,17 @@
 
 def generate_daily_logs(stops):
+    """Convert an iterable of RouteStopDTO or LogSegmentDTO into a dict
+    keyed by day: { day: [ {status, start, end}, ... ] }
+    Expects `stop` objects to have `day`, `start_minute`, `end_minute`, and
+    `type` (or `status`) attributes.
+    """
     daily_logs = {}
     for stop in stops:
         day = stop.day
-        if day not in daily_logs:
-            daily_logs[day] = []
-            current_minute = 0
-        else:
-            # TODO: should be understood this context
-            current_minute = daily_logs[day][-1]['end']
-        
-        duration_min = int(stop.duration_hr * 60)
-
-        daily_logs[day].append({
-            "status": stop.type,
-            "start": current_minute,
-            "end": current_minute + duration_min
-        })
+        seg = {
+            "status": getattr(stop, "type", getattr(stop, "status", "")),
+            "start": stop.start_minute,
+            "end": stop.end_minute,
+        }
+        daily_logs.setdefault(day, []).append(seg)
     return daily_logs

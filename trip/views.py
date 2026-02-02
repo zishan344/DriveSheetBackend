@@ -2,6 +2,7 @@ from collections import defaultdict
 from datetime import date, timedelta
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from trip.models import Trip, RouteStop, DailyLog, LogSegment
 from trip.serializers import (
@@ -18,6 +19,8 @@ from trip.services.log_generator import generate_daily_logs
 class TripViewSet(viewsets.ModelViewSet):
     queryset = Trip.objects.all()
     serializer_class = TripSerializer
+    # everyone can acess and read, write update, delete
+    permission_classes = [AllowAny]
 
     def create(self, request, *args, **kwargs):
         data = request.data
