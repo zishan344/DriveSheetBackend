@@ -1,7 +1,7 @@
 
 
 from pathlib import Path
-
+from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -17,7 +17,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 CORS_ALLOWED_ORIGINS  = [
-    "http://localhost:3000","http://127.0.0.1:8000", "http://localhost:5173"]
+    "http://localhost:3000","http://127.0.0.1:8000", "http://localhost:5173","https://driver-sheet.vercel.app"]
 CORS_ALLOW_METHODS = (
     "DELETE",
     "GET",
@@ -86,10 +86,21 @@ WSGI_APPLICATION = 'DriveSheet.wsgi.application'
 
 DATABASES = {
     'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'USER': config("USER"),
+        'PASSWORD': config("PASSWORD"),
+        'HOST': config("HOST"),
+        'PORT': config("PORT"),
+        'NAME': config("DBNAME"),
+    }
+}
+# sqlite configuration
+""" DATABASES = {
+    'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-}
+} """
 
 
 # Password validation
