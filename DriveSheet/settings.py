@@ -13,11 +13,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-e0ve=7l9up3bduiz)rqah^umiu5dzos1!*#lj7gt7$2di(ylv+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 CORS_ALLOWED_ORIGINS  = [
-    "http://localhost:3000","http://127.0.0.1:8000", "http://localhost:5173","https://driver-sheet.vercel.app"]
+    "http://localhost:3000","http://127.0.0.1:8000", "http://localhost:5173","https://driver-sheet.vercel.app",".vercel.app"]
 CORS_ALLOW_METHODS = (
     "DELETE",
     "GET",
@@ -37,7 +37,10 @@ CORS_ALLOW_HEADERS = (
 
 # Application definition
 
+WSGI_APPLICATION = 'DriveSheet.wsgi.app'
+
 INSTALLED_APPS = [
+    "whitenoise.runserver_nostatic",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -51,6 +54,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     "corsheaders.middleware.CorsMiddleware",
@@ -142,3 +146,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
