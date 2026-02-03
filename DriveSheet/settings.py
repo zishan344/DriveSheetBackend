@@ -82,7 +82,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'DriveSheet.wsgi.application'
+WSGI_APPLICATION = 'DriveSheet.wsgi.app'
 
 
 # Database
