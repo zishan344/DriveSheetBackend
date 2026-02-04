@@ -9,8 +9,8 @@ class Trip(models.Model):
     pickup_location = models.CharField(max_length=255)
     drop_location = models.CharField(max_length=255)
     cycle_used_hours = models.FloatField()
-    total_distance_miles = models.FloatField()
-    total_duration_hours = models.FloatField()
+    total_distance_miles = models.FloatField(blank=True)
+    total_duration_hours = models.FloatField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):

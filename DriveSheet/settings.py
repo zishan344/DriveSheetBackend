@@ -17,7 +17,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['.vercel.app', 'now.sh', '127.0.0.1', 'localhost']
 CORS_ALLOWED_ORIGINS  = [
-    "http://localhost:3000","http://127.0.0.1:8000", "http://localhost:5173","https://driver-sheet.vercel.app",".vercel.app"]
+    "http://localhost:3000","http://127.0.0.1:8000", "http://localhost:5173","https://driver-sheet.vercel.app"]
 CORS_ALLOW_METHODS = (
     "DELETE",
     "GET",

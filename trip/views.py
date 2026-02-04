@@ -23,8 +23,10 @@ class TripViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
 
     def create(self, request, *args, **kwargs):
-        data = request.data
-
+        serializer = self.get_serializer(data=request.data)
+        # check data is valid or not
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
         # Route calculation (from pickup to dropoff)
         route = get_route(
             data["pickup_location"],
